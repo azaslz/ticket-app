@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Route;
  *    ・不一致 → 「ユーザーIDまたはパスワードが正しくありません」、失敗回数 +1
  *    ・失敗回数が規定回数（5回）に達したら、そのユーザーIDを一定時間（15分）ロック
  *    ・成功 → 失敗回数を0に戻し、POSITION.Position_name で移動先を分ける
- *        一般 → マイページ ／ 企業 → 企業ページ ／ 管理者 → 管理者ページ
+ *        一般 → トップページ（/） ／ 企業 → 企業ページ ／ 管理者 → 管理者ページ
  * 3) 「パスワードを忘れた方」 … パスワード変更画面へ（画面側のリンク）
  *
  * 失敗回数とロックは、ACOUNT テーブルに列がないため Laravel の RateLimiter（キャッシュ）で数えている。
@@ -32,11 +32,10 @@ class LoginController extends Controller
     private const MISMATCH = 'ユーザーIDまたはパスワードが正しくありません';
 
     /**
-     * 役職名 → 移動先のルート名
-     * まだ画面がないものは、できるまで仮の移動先（FALLBACK）を使う
+     * 企業・管理者の移動先のルート名（一般はトップページ「/」へ移動する）
+     * まだ画面がないものは、できるまでログイン画面に「準備中」と表示する
      */
     private const DESTINATIONS = [
-        '一般'   => 'mypage',
         '企業'   => 'company.index',
         '管理者' => 'admin.index',
     ];
@@ -148,16 +147,16 @@ class LoginController extends Controller
     /** 役職名で移動先を分ける（画面がまだないときは仮の移動先） */
     private function redirectByPosition(?string $positionName)
     {
-        $route = self::DESTINATIONS[$positionName] ?? null;
-
-        if ($route && Route::has($route)) {
-            return redirect()->route($route);
+        // 一般 → トップページ
+        // ※ トップページができるまでは、routes/web.php の「/」がマイチケットへ移動させている
+        if ($positionName === '一般') {
+            return redirect('/');
         }
 
-        // 仮の移動先（画面ができたら自動でそちらへ移る）
-        //   一般 → マイチケット ／ それ以外 → ログイン画面に「準備中」と表示
-        if ($positionName === '一般') {
-            return redirect()->route('myticket.index');
+        // 企業・管理者 → それぞれのページ（画面ができたら自動でそちらへ移る）
+        $route = self::DESTINATIONS[$positionName] ?? null;
+        if ($route && Route::has($route)) {
+            return redirect()->route($route);
         }
         return redirect()->route('login')->with('success', "ログインしました（{$positionName}向けのページは準備中です）。");
     }
