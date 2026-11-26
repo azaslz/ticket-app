@@ -1,0 +1,42 @@
+/*
+ * ============================================================
+ *  TICKET HUB 共通デザイン設定（色・フォント）
+ *
+ *  色は Tailwind に最初から入っている色（blue-600 など）から選び、
+ *  チームの名前（primary など）を付けている。
+ *  画面では bg-primary / text-muted のようにチームの名前で書く。
+ *
+ *  色を変えたいときは、右側の Tailwind の色を選び直すだけでよい
+ *  （例：primary を青から藍色にする → var(--color-indigo-600)）。
+ *  名前（左側）は変えない・消さない。
+ *  （使い方は docs/UI_GUIDE.md）
+ * ============================================================
+ */
+@theme {
+    /* フォント（Zen Kaku Gothic New は layout で Google Fonts から読み込む） */
+    --font-sans: 'Zen Kaku Gothic New', ui-sans-serif, system-ui, 'Hiragino Sans', 'Yu Gothic UI', sans-serif;
+
+    /* メイン操作（QRボタン・更新ボタン・決定など） */
+    --color-primary: var(--color-blue-600);
+    --color-primary-dark: var(--color-blue-700);
+    --color-primary-light: var(--color-blue-50);
+
+    /* もう1つの前向き操作（座席表ボタン）・当選・受付中 */
+    --color-success: var(--color-emerald-600);
+    --color-success-dark: var(--color-emerald-700);
+    --color-success-light: var(--color-emerald-50);
+
+    /* 抽選中・注意 / エラー・削除 */
+    --color-warning: var(--color-amber-700);
+    --color-warning-light: var(--color-amber-50);
+    --color-danger: var(--color-red-600);
+    --color-danger-light: var(--color-red-50);
+
+    /* 背景・面・線・文字 */
+    --color-page: var(--color-slate-100);    /* ページ全体の背景 */
+    --color-panel: var(--color-slate-200);   /* 控えめな面（落選ラベルなど） */
+    --color-surface: var(--color-white);     /* カード・サイドパネル */
+    --color-line: var(--color-slate-200);    /* 枠線 */
+    --color-ink: var(--color-slate-800);     /* 本文 */
+    --color-muted: var(--color-slate-500);   /* 補足テキスト */
+}

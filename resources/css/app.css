@@ -1,0 +1,19 @@
+@import 'tailwindcss';
+
+/*
+ * チームの共通 CSS（この2つは勝手に変更しない）
+ *   theme.css … 色・フォント（Tailwind の色にチームの名前を付けたもの）
+ *   ui.css    … 基本スタイルと、クラスだけでは作れない部品
+ */
+@import './theme.css';
+@import './ui.css';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+
+/*
+ * ここより下は各自の追加 CSS を書く場所（なるべく使わない）
+ * 追加するときはチームに相談し、色は var(--color-primary) のようにチームの色の名前を使う
+ */

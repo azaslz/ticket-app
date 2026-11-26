@@ -1,0 +1,46 @@
+/*
+ * ============================================================
+ *  TICKET HUB 共通の基本スタイル
+ *  ・何もクラスを付けていない要素の見た目（文字・見出し）
+ *  ・Tailwind のクラスだけでは作れない部品（チケットの切り取り線）
+ * ============================================================
+ */
+@layer base {
+    body {
+        @apply bg-page text-ink font-sans antialiased;
+        font-feature-settings: 'palt';  /* 和文の字間を詰めて整える */
+    }
+
+    /*
+     * クラスを付けずに書いた見出しも、ガイドの文字サイズにそろえる
+     * （後から共有した画面の見出しがばらばらにならないように。クラスを付けた場合はそちらが優先）
+     */
+    h1 { @apply text-2xl font-bold tracking-wide; }
+    h2 { @apply text-lg font-bold; }
+    h3 { @apply text-base font-bold; }
+}
+
+@layer components {
+    /*
+     * チケットの切り取り線（<x-card ticket> の footer 上に入る）
+     * 左右の半円は背景色で「切り欠き」に見せる
+     */
+    .ticket-perforation {
+        position: relative;
+        margin-inline: -1rem;
+        border-top: 2px dashed var(--color-line);
+    }
+    .ticket-perforation::before,
+    .ticket-perforation::after {
+        content: '';
+        position: absolute;
+        top: -10px;
+        width: 18px;
+        height: 18px;
+        border-radius: 9999px;
+        background: var(--color-page);
+        box-shadow: inset 0 0 0 1px var(--color-line);
+    }
+    .ticket-perforation::before { left: -9px; clip-path: inset(0 0 0 50%); }
+    .ticket-perforation::after  { right: -9px; clip-path: inset(0 50% 0 0); }
+}
